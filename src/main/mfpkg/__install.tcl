@@ -103,8 +103,7 @@ set plugin_namespace  mflux/plugins
 set plugin_zip        "${ARTIFACT_ID}-plugin.zip"
 set plugin_jar        "${ARTIFACT_ID}-plugin.jar"
 set module_class      "${PKG}.DarisPluginModule"
-add_plugin_module ${plugin_namespace} ${plugin_zip} ${plugin_jar} ${module_class} ${plugin_label} { libs/daris-commons.jar }
-#plugin.module.library.add :class ${module_class} :path ${plugin_namespace}/${plugin_jar} :lib libs/daris-commons.jar
+add_plugin_module ${plugin_namespace} ${plugin_zip} ${plugin_jar} ${module_class} ${plugin_label} { daris-commons.jar }
 
 srefresh
 
