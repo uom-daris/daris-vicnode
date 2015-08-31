@@ -49,7 +49,7 @@ if { [xvalue exists [asset.doc.namespace.exists :namespace ${DOC_NS}]] == "false
     asset.doc.namespace.create :namespace ${DOC_NS}
 } 
 source doc-types.tcl
-create_doc_types ${DOC_NS}
+create_doc_types ${DOC_NS} ${DICT_NS}
 
 #============================================================================
 # Add our Study Types. The command-line arguments allows you to choose to
@@ -111,7 +111,7 @@ srefresh
 # Set up roles & permissions
 #=============================================================================
 source role-permissions.tcl
-set_role_permissions ${DOC_NS} ${ROLE_NS} ${SERVICE_PREFIX}
+set_role_permissions ${DOC_NS} ${ROLE_NS} ${DICT_NS} ${SERVICE_PREFIX}
 
 #=============================================================================
 # Register a Project role-member exemplar

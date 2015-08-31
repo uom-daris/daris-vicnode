@@ -60,7 +60,7 @@ proc create_method_human_generic { doc_ns { action 0 } { fillin 0 } } {
                     :metadata < :definition -requirement optional ${doc_ns}:pssd-human-subject > \
                     :metadata < :definition -requirement optional mf-note > > \
                 :private < \
-                    :metadata < :definition -requirement optional daris-dmn:pssd-human-identity > > > > \
+                    :metadata < :definition -requirement optional ${doc_ns}:pssd-human-identity > > > > \
         :step < \
             :name \"Generic acquisition for human subject\" \
             :description \"Generic acquisition for human subject\" \

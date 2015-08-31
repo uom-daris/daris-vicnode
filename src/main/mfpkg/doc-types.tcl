@@ -22,7 +22,7 @@ proc create_doc_type_pssd_subject { doc_ns } {
 #============================================================================#
 # creates doc type: ${doc_ns}:pssd-animal-subject                            #
 #============================================================================#
-proc create_doc_type_pssd_animal_subject { doc_ns } {
+proc create_doc_type_pssd_animal_subject { doc_ns dict_ns } {
     asset.doc.type.update :create yes :type ${doc_ns}:pssd-animal-subject \
         :label "Animal subject" \
         :description "Basic document type for a domain specific animal (humans included) subject" \
@@ -30,11 +30,11 @@ proc create_doc_type_pssd_animal_subject { doc_ns } {
             :element -name "species" -type "enumeration" -index "true" -min-occurs "0" -max-occurs "1" < \
                 :description "Species type of the animal" \
                 :restriction -base "enumeration" < \
-                    :dictionary "pssd.animal.species" > > \
+                    :dictionary "${dict_ns}:pssd.animal.species" > > \
             :element -name "body-part" -type "enumeration" -index "true" -min-occurs "0" < \
                 :description "Body part of the animal" \
                 :restriction -base "enumeration" < \
-                    :dictionary "pssd.animal.bodypart" > \
+                    :dictionary "${dict_ns}:pssd.animal.bodypart" > \
                 :attribute -name "sidedness" -type "boolean" -min-occurs "0" < \
                     :description "If the body part comes from the left or right (your convention for orientation) side you can specify here.  Don't supply to leave unspecified." > > \
             :element -name "gender" -type "enumeration" -index "true" -min-occurs "0" -max-occurs "1" < \
@@ -128,9 +128,9 @@ proc create_doc_type_pssd_human_identity { doc_ns } {
 #============================================================================#
 # creates all domain specific doc types                                      #
 #============================================================================#
-proc create_doc_types { doc_ns } {
+proc create_doc_types { doc_ns dict_ns } {
     create_doc_type_pssd_subject ${doc_ns}
-    create_doc_type_pssd_animal_subject ${doc_ns}
+    create_doc_type_pssd_animal_subject ${doc_ns} ${dict_ns}
     create_doc_type_pssd_human_subject ${doc_ns}
     create_doc_type_pssd_identity ${doc_ns}
     create_doc_type_pssd_human_identity ${doc_ns}
