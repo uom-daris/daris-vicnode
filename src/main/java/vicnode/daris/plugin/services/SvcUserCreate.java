@@ -12,6 +12,7 @@ public class SvcUserCreate extends PluginService {
     public static final String SERVICE_DESCRIPTION = "Creates a user in the given local domain, and grant the user daris model user roles.";
 
     public static final String MODEL_USER_ROLE = "daris:pssd.model.user";
+    public static final String SUBJECT_CREATOR_ROLE = "daris:pssd.subject.create";
     public static final String DOMAIN_MODEL_USER_ROLE = "vicnode.daris:pssd.model.user";
 
     private Interface _defn;
@@ -64,6 +65,7 @@ public class SvcUserCreate extends PluginService {
         dm.add("name", domain + ":" + user);
         dm.add("role", new String[] { "type", "role" }, MODEL_USER_ROLE);
         dm.add("role", new String[] { "type", "role" }, DOMAIN_MODEL_USER_ROLE);
+        dm.add("role", new String[] { "type", "role" }, SUBJECT_CREATOR_ROLE);
         executor().execute("actor.grant", dm.root());
     }
 
