@@ -1,4 +1,4 @@
-proc set_role_permissions { doc_ns role_ns service_prefix } {
+proc set_role_permissions { doc_ns role_ns dict_ns service_prefix } {
 
     # Standard document types
     set doc_perms [ list \
@@ -25,6 +25,8 @@ proc set_role_permissions { doc_ns role_ns service_prefix } {
     # Role for user of this package; grant this to your users.
     set domain_model_user_role        ${role_ns}:pssd.model.user
     authorization.role.create :ifexists ignore :role ${domain_model_user_role}
+    actor.grant :name ${domain_model_user_role} :type role :perm < :access ACCESS :resource -type dictionary:namespace ${dict_ns} >
+
 
     grant_role_perms ${domain_model_user_role} ${doc_perms}
     grant_role_perms ${domain_model_user_role} ${service_perms}
