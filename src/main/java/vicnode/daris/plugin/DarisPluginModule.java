@@ -3,6 +3,7 @@ package vicnode.daris.plugin;
 import java.util.Collection;
 import java.util.Vector;
 
+import vicnode.daris.plugin.services.SvcDicomProxyUserCreate;
 import vicnode.daris.plugin.services.SvcSubjectMetaSet;
 import vicnode.daris.plugin.services.SvcUserCreate;
 import arc.mf.plugin.ConfigurationResolver;
@@ -32,6 +33,7 @@ public class DarisPluginModule implements arc.mf.plugin.PluginModule {
         _services = new Vector<PluginService>();
         _services.add(new SvcUserCreate());
         _services.add(new SvcSubjectMetaSet());
+        _services.add(new SvcDicomProxyUserCreate());
     }
 
     @Override
