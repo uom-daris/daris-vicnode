@@ -1,6 +1,9 @@
 package vicnode.daris.plugin.services;
 
 import arc.mf.plugin.PluginService;
+import arc.mf.plugin.ServiceExecutor;
+import arc.mf.plugin.atomic.AtomicOperation;
+import arc.mf.plugin.atomic.AtomicTransaction;
 import arc.mf.plugin.dtype.EmailAddressType;
 import arc.mf.plugin.dtype.StringType;
 import arc.xml.XmlDoc.Element;
@@ -48,25 +51,33 @@ public class SvcUserCreate extends PluginService {
     }
 
     @Override
-    public void execute(Element args, Inputs inputs, Outputs outputs,
+    public void execute(final Element args, Inputs inputs, Outputs outputs,
             XmlWriter w) throws Throwable {
+        new AtomicTransaction(new AtomicOperation() {
 
-        String domain = args.value("domain");
-        String user = args.value("user");
-        /*
-         * create the user
-         */
-        executor().execute("user.create", args);
-        /*
-         * grant roles
-         */
-        XmlDocMaker dm = new XmlDocMaker("args");
-        dm.add("type", "user");
-        dm.add("name", domain + ":" + user);
-        dm.add("role", new String[] { "type", "role" }, MODEL_USER_ROLE);
-        dm.add("role", new String[] { "type", "role" }, DOMAIN_MODEL_USER_ROLE);
-        dm.add("role", new String[] { "type", "role" }, SUBJECT_CREATOR_ROLE);
-        executor().execute("actor.grant", dm.root());
+            @Override
+            public boolean execute(ServiceExecutor executor) throws Throwable {
+                String domain = args.value("domain");
+                String user = args.value("user");
+                /*
+                 * create the user
+                 */
+                executor().execute("user.create", args);
+                /*
+                 * grant roles
+                 */
+                XmlDocMaker dm = new XmlDocMaker("args");
+                dm.add("type", "user");
+                dm.add("name", domain + ":" + user);
+                dm.add("role", new String[] { "type", "role" }, MODEL_USER_ROLE);
+                dm.add("role", new String[] { "type", "role" },
+                        DOMAIN_MODEL_USER_ROLE);
+                dm.add("role", new String[] { "type", "role" },
+                        SUBJECT_CREATOR_ROLE);
+                executor.execute("actor.grant", dm.root());
+                return false;
+            }
+        }).execute(executor());
     }
 
     @Override
