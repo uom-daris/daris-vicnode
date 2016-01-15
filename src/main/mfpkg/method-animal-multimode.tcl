@@ -1,12 +1,3 @@
-proc get_daris_method_namespace { } {
-    set ns [xvalue property [application.property.get :property -app daris daris.namespace.default]]
-    if { ${ns} == "pssd" || [string_ends_with ${ns} "pssd"] == 1 } {
-        return "${ns}/methods"
-    } else {
-        return "${ns}/pssd/methods"
-    }
-}
-
 #============================================================================#
 # Simple method for multi mode animal acquisitions.                          #
 #                                                                            #
@@ -46,7 +37,7 @@ proc create_method_animal_multimode { doc_ns { action 0 } { fillin 0 } } {
        set args "${args} :fillin false"
     }
    
-    set method_ns [get_daris_method_namespace] 
+    set method_ns [get_asset_namespace_for_methods] 
     set args "${args} \
         :namespace \"${method_ns}\"  \
         :name \"${name}\" \

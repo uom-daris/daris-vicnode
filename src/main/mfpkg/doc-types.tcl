@@ -125,6 +125,68 @@ proc create_doc_type_pssd_human_identity { doc_ns } {
             :element -name suffix -type string -min-occurs 0 -max-occurs 1 -length 20 -label "Suffix" >
 }
 
+
+#============================================================================#
+# creates doc type: ${doc_ns}:femur-subject                                  #
+#                                                                            #
+# Information about the MDS Femur (human) subject.                           #  
+#============================================================================#
+proc create_doc_type_femur_subject { doc_ns } {
+    asset.doc.type.update \
+        :create true :type ${doc_ns}:femur-subject \
+        :label "Femur subject" \
+        :description "MDS Femur subject." \
+        :definition < \
+            :element -name "specimen-number" -type integer -min-occurs 1 -max-occurs 2 -index true < :description "The specimen number." > \
+            :element -name "vifm-case-number" -type string -min-occurs 0 -max-occurs 1 -index true < :description "The VIFM case number." > \
+            :element -name "age" -type float -min-occurs 0 -max-occurs 1 -index true < :description "The age of the human subject. (unit: year)" > \
+            :element -name "sex" -type enumeration -min-occurs 0 -max-occurs 1 -index true < \
+                :description "The sex of the subject." \
+                :restriction -base enumeration < :value "male" :value "female" :value "unknown" > > \
+            :element -name "height" -type float -min-occurs 0 -max-occurs 1 -index true < :description "The subject's height. (unit: cm)" > \
+            :element -name "weight" -type float -min-occurs 0 -max-occurs 1 -index true < :description "The subject's weight. (unit: kg)" > >
+}
+
+
+#============================================================================#
+# creates doc type: ${doc_ns}:femur-study                                    #
+#                                                                            #
+# Information about the MDS Femur study.                                     #  
+#============================================================================#
+proc create_doc_type_femur_study { doc_ns dict_ns } {
+    asset.doc.type.update :create true \
+        :type ${doc_ns}:femur-study \
+        :label "Femur subject" \
+        :description "A Femur subject." \
+        :definition < \
+            :element -name "sdate" -type date -min-occurs 0 -max-occurs 1 -index true < \
+                :description "Date on which acquisition of the study was started." \
+                :restriction -base date < :time false > > \
+            :element -name "subject" -type document -min-occurs 0 -max-occurs 1 -index true < \
+                :description "Subject statistics, at the time of study." \
+                :element -name "age" -type float -min-occurs 0 -max-occurs 1 -index true < :description "The age of the human subject. (unit: year)" > \
+                :element -name "sex" -type enumeration -min-occurs 0 -max-occurs 1 -index true < \
+                    :description "The sex of the subject." \
+                    :restriction -base enumeration < :value "male" :value "female" :value "unknown" > > \
+                :element -name "height" -type float -min-occurs 0 -max-occurs 1 -index true < :description "The subject's height. (unit: cm)" > \
+                :element -name "weight" -type float -min-occurs 0 -max-occurs 1 -index true < :description "The subject's weight. (unit: kg)" > > \
+            :element -name "specimen-number" -type integer -min-occurs 1 -max-occurs 1 -index true < :description "The specimen number." > \
+            :element -name "vifm-case-number" -type string -min-occurs 0 -max-occurs 1 -index true < :description "The VIFM case number." > \
+            :element -name "specimen-type" -type enumeration -min-occurs 1 -max-occurs 1 -index true < \
+                :description "The specimen type of the subject." \
+                :restriction -base enumeration < :dictionary ${dict_ns}:femur.specimen.type > > \
+            :element -name "blood" -type boolean -min-occurs 1 -max-occurs 1 -index true < :description "blood" > \
+            :element -name "hard-ground-sections" -type boolean -min-occurs 1 -max-occurs 1 -index true < :description "hard ground sections" > \
+            :element -name "mounted-sections" -type boolean -min-occurs 1 -max-occurs 1 -index true < :description "mounted sections" > \
+            :element -name "image-type" -type enumeration -min-occurs 1 -max-occurs 1 -index true < \
+                :description "The image type" \
+                :restriction -base enumeration < :dictionary ${dict_ns}:femur.image.type > > \
+            :element -name "two-inch-glass-plates" -type boolean -min-occurs 0 -max-occurs 1 -index true < :description "2 inch glass plates" > \
+            :element -name "plane-radio-graph-of-pelvis" -type boolean -min-occurs 0 -max-occurs 1 -index true < :description "plane radio graph of pelvis" > \
+            :element -name "mid-shaft-porosity-and-cross-sectional-geometry-data" -type boolean -min-occurs 0 -max-occurs 1 -index true < :description "mid-shaft porosity and cross-sectional geometry data" > \
+            :element -name "autopsy-report-or-medical-questionnaire" -type boolean -min-occurs 0 -max-occurs 1 -index true < :description "Autopsy Report or Medical Questionnaire" > >
+}
+
 #============================================================================#
 # creates all domain specific doc types                                      #
 #============================================================================#
@@ -134,6 +196,8 @@ proc create_doc_types { doc_ns dict_ns } {
     create_doc_type_pssd_human_subject ${doc_ns}
     create_doc_type_pssd_identity ${doc_ns}
     create_doc_type_pssd_human_identity ${doc_ns}
+    create_doc_type_femur_subject ${doc_ns}
+    create_doc_type_femur_study ${doc_ns} ${dict_ns}
 }
 
 #============================================================================#
@@ -145,5 +209,6 @@ proc destroy_doc_types { doc_ns } {
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-human-subject  :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-identity       :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-human-identity :force true } catch { Throwable } { }
+    try { asset.doc.type.destroy :type ${doc_ns}:femur-subject       :force true } catch { Throwable } { }
+    try { asset.doc.type.destroy :type ${doc_ns}:femur-study         :force true } catch { Throwable } { }
 }
-

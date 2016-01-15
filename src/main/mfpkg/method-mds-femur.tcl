@@ -1,6 +1,5 @@
 #============================================================================#
-# Very generic Method as an example. No specific Subject meta-data as  that  #
-# would be domain specific.                                                  #
+# Method for MDS Femur data collection.                                      #
 #                                                                            #
 # Arguments:                                                                 #
 #     action: action to take if method pre-exists, action = 0 (do nothing),  #
@@ -9,9 +8,9 @@
 #             fillin=0 (don't fill in cid allocator space),                  #
 #                    1 (fill in cid allocator space)                         #
 #============================================================================#
-proc create_method_generic { doc_ns { action 0 } { fillin 0 } } {
-    set name "DaRIS Generic Method"
-    set description "DaRIS Method with data acquisition of an unspecified Study type."
+proc create_method_mds_femur { doc_ns { action 0 } { fillin 0 } } {
+    set name "Melbourne Femur Collection"
+    set description "DaRIS Method for Melbourne Dental School Femur Data Collection."
 
     # look for existing method with the same name
     set id [xvalue id [om.pssd.method.find :name ${name}]]
@@ -46,14 +45,20 @@ proc create_method_generic { doc_ns { action 0 } { fillin 0 } } {
         :subject < \
             :project < \
                 :public < \
-                    :metadata < :definition -requirement optional ${doc_ns}:pssd-subject > \
-                    :metadata < :definition -requirement optional ${doc_ns}:pssd-identity > \
-                    :metadata < :definition -requirement optional mf-note > > > > \
+                    :metadata < :definition -requirement optional ${doc_ns}:femur-subject > > > > \
         :step < \
-            :name \"Generic acquisition\" \
-            :description \"Generic acquisition of subject\" \
-            :study < :type Unspecified > >"
-
+            :name \"Computed Radiography (CR) acquisition\" \
+            :description \"Computed Radiography (CR) acquisition\" \
+            :study < \
+                :type \"Computed Radiography\" :dicom < :modality CR > \
+                :metadata < :definition -requirement optional ${doc_ns}:femur-study > > > \
+        :step < \
+            :name \"Computed Tomography (CT) acquisition\" \
+            :description \"Computed Tomography (CT) acquisition\" \
+            :study < \
+                :type \"Computed Tomography\" :dicom < :modality CT > \
+                :metadata < :definition -requirement optional ${doc_ns}:femur-study > > >"
+ 
     if { ${id} != "" && ${action} == 1 } {
         # replace (update) the existing method
         om.pssd.method.for.subject.update $args

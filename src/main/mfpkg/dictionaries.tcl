@@ -61,12 +61,45 @@ proc create_dict_pssd_animal_species { dict_ns } {
     dictionary.entry.add :dictionary ${dict} :term wallaby
 }
 
+
+#============================================================================#
+# creates dictionary: ${dict_ns}:femur.specimen.type                         #
+#============================================================================#
+proc create_dict_femur_specimen_type { dict_ns } {
+    set dict ${dict_ns}:femur.specimen.type
+    set desc "Femur specimen types"
+    if { [xvalue exists [dictionary.exists :name ${dict}]] == "false" } {
+        dictionary.create :name ${dict} :description ${desc} :case-sensitive true
+    }
+    dictionary.entry.add :dictionary ${dict} :term "2cm mid-shaft block"
+    dictionary.entry.add :dictionary ${dict} :term "proximal femur"
+    dictionary.entry.add :dictionary ${dict} :term "OA post-op femoral heads"
+    dictionary.entry.add :dictionary ${dict} :term "whole femur"
+}
+
+#============================================================================#
+# creates dictionary: ${dict_ns}:femur.specimen.type                         #
+#============================================================================#
+proc create_dict_femur_image_type { dict_ns } {
+    set dict ${dict_ns}:femur.image.type
+    set desc "Femur image types"
+    if { [xvalue exists [dictionary.exists :name ${dict}]] == "false" } {
+        dictionary.create :name ${dict} :description ${desc} :case-sensitive true
+    }
+    dictionary.entry.add :dictionary ${dict} :term "microradiography" :definition "micro radiography"
+    dictionary.entry.add :dictionary ${dict} :term "pQCT" :definition "peripheral quantitative computed tomography"
+    dictionary.entry.add :dictionary ${dict} :term "microCT" :definition "micro computed tomography"
+    dictionary.entry.add :dictionary ${dict} :term "Clinical CT" :definition "clinical computed tomography"
+}
+
 #============================================================================#
 # creates all domain-specific dictionaries.                                  #
 #============================================================================#
 proc create_dictionaries { dict_ns } {
     create_dict_pssd_animal_species ${dict_ns}
     create_dict_pssd_animal_bodypart ${dict_ns}
+    create_dict_femur_specimen_type ${dict_ns}
+    create_dict_femur_image_type ${dict_ns}
 }
 
 #============================================================================#
@@ -75,5 +108,7 @@ proc create_dictionaries { dict_ns } {
 proc destroy_dictionaries { dict_ns } {
     dictionary.destroy :name ${dict_ns}:pssd.animal.species
     dictionary.destroy :name ${dict_ns}:pssd.animal.bodypart
+    dictionary.destroy :name ${dict_ns}:femur.specimen.type
+    dictionary.destroy :name ${dict_ns}:femur.image.type
 }
 

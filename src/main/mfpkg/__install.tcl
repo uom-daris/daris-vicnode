@@ -95,6 +95,9 @@ create_method_human_generic ${DOC_NS} $methodAction $fillInMethods
 source method-animal-multimode.tcl
 create_method_animal_multimode ${DOC_NS} $methodAction $fillInMethods
 
+source method-mds-femur.tcl
+create_method_mds_femur ${DOC_NS} $methodAction $fillInMethods
+
 # ============================================================================
 # Add plugin module
 # ============================================================================
