@@ -135,3 +135,8 @@ if { $updateModel == 1 } {
    source metadata-register.tcl
    register_metadata ${DOC_NS}
 }
+
+#=============================================================================
+# Create mime types
+#=============================================================================
+source mime-types.tcl

@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>vicnode</groupId>
 	<artifactId>daris-vicnode</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>jar</packaging>
 	<name>daris-vicnode</name>
 	<url>https://github.com/vicnode/daris-vicnode</url>
 	<description>DaRIS domain specific addon package for VicNode.</description>
 	<organization>
 		<name>VicNode</name>
-		<url>http://your-organization.org</url>
+		<url>https://daris.vicnode.org.au</url>
 	</organization>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
