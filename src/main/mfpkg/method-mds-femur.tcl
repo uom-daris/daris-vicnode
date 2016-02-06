@@ -57,6 +57,12 @@ proc create_method_mds_femur { doc_ns { action 0 } { fillin 0 } } {
             :description \"Computed Tomography (CT) acquisition\" \
             :study < \
                 :type \"Computed Tomography\" :dicom < :modality CT > \
+                :metadata < :definition -requirement optional ${doc_ns}:femur-study > > > \
+        :step < \
+            :name \"Magnetic Resonance (MR) acquisition\" \
+            :description \"Magnetic Resonance (MR) acquisition\" \
+            :study < \
+                :type \"Magnetic Resonance Imaging\" :dicom < :modality MR > \
                 :metadata < :definition -requirement optional ${doc_ns}:femur-study > > >"
  
     if { ${id} != "" && ${action} == 1 } {
