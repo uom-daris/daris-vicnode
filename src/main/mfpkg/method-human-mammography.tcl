@@ -10,7 +10,7 @@
 #============================================================================#
 proc create_method_human_mammography { doc_ns { action 0 } { fillin 0 } } {
     set name "DaRIS Human Mammography Method"
-    set description "DaRIS Method for Human subjects with Mammography data acquisition."
+    set description "DaRIS Method for Human subjects with Mammography (and Computed Radiology) data acquisition."
     
     # look for existing method with the same name
     set id [xvalue id [om.pssd.method.find :name ${name}]]
