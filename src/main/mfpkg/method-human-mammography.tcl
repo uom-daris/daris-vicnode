@@ -47,18 +47,17 @@ proc create_method_human_mammography { doc_ns { action 0 } { fillin 0 } } {
                     :metadata < :definition -requirement optional ${doc_ns}:pssd-subject :value < :type constant(animal) > > \
                     :metadata < :definition -requirement optional ${doc_ns}:pssd-animal-subject :value < :species constant(human) > > \
                     :metadata < :definition -requirement optional ${doc_ns}:pssd-human-subject > \
-                    :metadata < :definition -requirement optional mf-note > > \
+                  > \
                 :private < \
-                    :metadata < :definition -requirement optional ${doc_ns}:pssd-human-identity > > > > \
-        :step < \
+                    :metadata < :definition -requirement optional ${doc_ns}:pssd-human-identity > \
+                >  \
+             > \
+         > \
+         :step < \
             :name \"Mammography acquisition for human subject\" \
             :description \"Mammography acquisition for human subject\" \
-            :study < :type Mammography :dicom < :modality MG > > >"
-       :step < \
-            :name \"Mammography acquisition for human subject\" \
-            :description \"Computed Radiography acquisition for human subject\" \
-            :study < :type "Computed Radiography" :dicom < :modality CR > > >"
-
+            :study < :type Mammography :dicom < :modality MG :modality CR > > >"
+ 
     if { ${id} != "" && ${action} == 1 } {
         # replace (update) the existing method
         om.pssd.method.for.subject.update $args
