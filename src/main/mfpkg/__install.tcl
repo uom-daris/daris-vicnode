@@ -98,6 +98,9 @@ create_method_animal_multimode ${DOC_NS} $methodAction $fillInMethods
 source method-mds-femur.tcl
 create_method_mds_femur ${DOC_NS} $methodAction $fillInMethods
 
+source method-human-mammography.tcl
+create_method_human_mammography ${DOC_NS} $methodAction $fillInMethods
+
 # ============================================================================
 # Add plugin module
 # ============================================================================
