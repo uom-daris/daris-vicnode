@@ -26,8 +26,8 @@ public class SvcUserGrant extends PluginService {
         _defn = new Interface();
         _defn.add(new Interface.Element("domain", StringType.DEFAULT,
                 "The authentication domain of the user", 1, 1));
-        _defn.add(new Interface.Element("user", StringType.DEFAULT,
-                "The user.", 1, 1));
+        _defn.add(new Interface.Element("user", StringType.DEFAULT, "The user.",
+                1, 1));
     }
 
     @Override
@@ -53,8 +53,8 @@ public class SvcUserGrant extends PluginService {
         grantUser(executor(), domain, user);
     }
 
-    private static void grantUser(ServiceExecutor executor, String domain,
-            String user) throws Throwable {
+    static void grantUser(ServiceExecutor executor, String domain, String user)
+            throws Throwable {
         XmlDocMaker dm = new XmlDocMaker("args");
         dm.add("name", domain + ":" + user);
         dm.add("type", "user");
