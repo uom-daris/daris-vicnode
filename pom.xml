@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>vicnode</groupId>
 	<artifactId>daris-vicnode</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<packaging>jar</packaging>
 	<name>daris-vicnode</name>
 	<url>https://github.com/vicnode/daris-vicnode</url>

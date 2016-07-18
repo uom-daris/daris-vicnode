@@ -6,6 +6,7 @@ import java.util.Vector;
 import arc.mf.plugin.ConfigurationResolver;
 import arc.mf.plugin.PluginService;
 import vicnode.daris.plugin.services.SvcDicomProxyUserCreate;
+import vicnode.daris.plugin.services.SvcStorageReportSend;
 import vicnode.daris.plugin.services.SvcSubjectMetaSet;
 import vicnode.daris.plugin.services.SvcUserAAFCreate;
 import vicnode.daris.plugin.services.SvcUserCreate;
@@ -33,11 +34,12 @@ public class DarisPluginModule implements arc.mf.plugin.PluginModule {
     public void initialize(ConfigurationResolver config) throws Throwable {
 
         _services = new Vector<PluginService>();
+        _services.add(new SvcDicomProxyUserCreate());
+        _services.add(new SvcStorageReportSend());
+        _services.add(new SvcSubjectMetaSet());
         _services.add(new SvcUserAAFCreate());
         _services.add(new SvcUserCreate());
         _services.add(new SvcUserGrant());
-        _services.add(new SvcSubjectMetaSet());
-        _services.add(new SvcDicomProxyUserCreate());
 
     }
 
