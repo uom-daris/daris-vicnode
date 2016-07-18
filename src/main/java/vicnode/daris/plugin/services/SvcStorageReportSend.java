@@ -82,6 +82,10 @@ public class SvcStorageReportSend extends PluginService {
 
     private void sendEmail(Collection<String> receipients, String report,
             String mimeType) throws Throwable {
+        String ext = "csv";
+        if ("text/xml".equalsIgnoreCase(mimeType)) {
+            ext = "xml";
+        }
         XmlDocMaker dm = new XmlDocMaker("args");
 
         dm.add("subject", SUBJECT_PREFIX + " ["
@@ -93,7 +97,8 @@ public class SvcStorageReportSend extends PluginService {
 
         dm.push("attachment");
         dm.add("name", ATTACHMENT_NAME_PREFIX
-                + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+                + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+                + "." + ext);
         dm.add("type", mimeType);
         dm.pop();
 
