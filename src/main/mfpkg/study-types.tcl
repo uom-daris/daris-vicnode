@@ -12,6 +12,7 @@ proc create_study_types { } {
     om.pssd.study.type.create :type "Electrocardiography"
     om.pssd.study.type.create :type "Dose Report"
     om.pssd.study.type.create :type "Cardiac Electrophysiology"
+    om.pssd.study.type.create :type "Electro Encephalogram"
     om.pssd.study.type.create :type "General Microscopy"
     om.pssd.study.type.create :type "Intravascular Optical Coherence Tomography"
     om.pssd.study.type.create :type "Magnetic Resonance Imaging"
