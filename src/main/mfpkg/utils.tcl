@@ -1,4 +1,19 @@
 #============================================================================#
+# string functions                                                           #
+#============================================================================#
+
+proc string_ends_with { str substr } {
+    set len1 [string length $str]
+    set len2 [string length $substr]
+    set idx [string last $substr $str]
+    if { $idx != -1 && [expr $len1 - $len2] == $idx } {
+        return 1
+    } else {
+        return 0
+    }
+}
+
+#============================================================================#
 # dictionary functions                                                       #
 #============================================================================#
 
@@ -183,4 +198,16 @@ proc set_method_update_args { id { action 0 } { fillIn 0 }} {
        set margs  "${margs} :fillin false"
     }   
     return ${margs}
+}
+
+#
+# Gets the default asset namespace for methods
+#
+proc get_asset_namespace_for_methods { } {
+    set daris_asset_namespace [xvalue property [application.property.get :property -app daris daris.namespace.default]]
+    if { ${daris_asset_namespace} == "pssd" || [string_ends_with ${daris_asset_namespace} "pssd"] == 1 } {
+        return "${daris_asset_namespace}/methods"
+    } else {
+        return "${daris_asset_namespace}/pssd/methods"
+    }
 }

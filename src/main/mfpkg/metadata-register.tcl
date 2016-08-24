@@ -20,6 +20,9 @@ proc register_metadata { doc_ns } {
     # Your own doc types
     #set mtypeArgs "${mtypeArgs} :mtype -requirement optional ${doc_ns}:your-pssd-project-doc"
     
+    # vicnode.daris:vicnode-collection
+    set mtypeArgs "${mtypeArgs} :mtype -requirement optional ${doc_ns}:vicnode-collection"
+    
     # Replace any pre-existing (use :append true to append)
     set args ":append false :type project ${mtypeArgs}"
     om.pssd.type.metadata.set $args 

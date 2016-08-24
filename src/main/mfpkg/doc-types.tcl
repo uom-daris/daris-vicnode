@@ -1,4 +1,30 @@
 #============================================================================#
+# creates doc type: ${doc_ns}:vicnode-collection                             #
+#============================================================================#
+proc create_doc_type_vicnode_collection { doc_ns } {
+    asset.doc.type.update :create yes :type ${doc_ns}:vicnode-collection \
+        :label "VicNode Collection" \
+        :description "Information about the VicNode collection associated with the DaRIS project." \
+        :definition < \
+            :element -name name -type string -index true -min-occurs 0 -max-occurs 1 < \
+                :description "Name of the VicNode collection if differ from the DaRIS project name." > \
+            :element -name code -type string -index true -min-occurs 1 -max-occurs 1 < \
+                :description "The unique VicNode collection code." > \
+            :element -name quota -type double -index true -min-occurs 0 -max-occurs 1 < \
+                :description "The storage quota if known." \
+                :attribute -type enumeration -name unit -index true -min-occurs 1 < \
+                    :description "Unit" \
+                    :restriction -base enumeration < \
+                        :value gb \
+                        :value tb \
+                        :value pb > > > \
+            :element -name attribute -type string -index true -min-occurs 0 -max-occurs 256 < \
+                :description "Arbitrary attributes." \
+                :attribute -name name -type string -index true -min-occurs 1 < \
+                    :description "attribute name." > > >
+}
+
+#============================================================================#
 # creates doc type: ${doc_ns}:pssd-subject                                   #
 #============================================================================#
 proc create_doc_type_pssd_subject { doc_ns } {
@@ -216,6 +242,7 @@ proc create_doc_type_femur_dataset { doc_ns dict_ns } {
 # creates all domain specific doc types                                      #
 #============================================================================#
 proc create_doc_types { doc_ns dict_ns } {
+    create_doc_type_vicnode_collection ${doc_ns}
     create_doc_type_pssd_subject ${doc_ns}
     create_doc_type_pssd_animal_subject ${doc_ns} ${dict_ns}
     create_doc_type_pssd_human_subject ${doc_ns}
@@ -230,6 +257,7 @@ proc create_doc_types { doc_ns dict_ns } {
 # destroys all domain specific doc types                                     #
 #============================================================================#
 proc destroy_doc_types { doc_ns } {
+    try { asset.doc.type.destroy :type ${doc_ns}:vicnode-collection  :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-subject        :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-animal-subject :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-human-subject  :force true } catch { Throwable } { }
