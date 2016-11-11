@@ -92,6 +92,9 @@ create_method_generic ${DOC_NS} $methodAction $fillInMethods
 source method-human-generic.tcl
 create_method_human_generic ${DOC_NS} $methodAction $fillInMethods
 
+source method-animal-generic.tcl
+create_method_animal_generic ${DOC_NS} $methodAction $fillInMethods
+
 source method-animal-multimode.tcl
 create_method_animal_multimode ${DOC_NS} $methodAction $fillInMethods
 
@@ -100,6 +103,7 @@ create_method_mds_femur ${DOC_NS} $methodAction $fillInMethods
 
 source method-human-mammography.tcl
 create_method_human_mammography ${DOC_NS} $methodAction $fillInMethods
+
 
 # ============================================================================
 # Add plugin module
