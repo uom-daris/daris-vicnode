@@ -92,6 +92,9 @@ create_method_generic ${DOC_NS} $methodAction $fillInMethods
 source method-human-generic.tcl
 create_method_human_generic ${DOC_NS} $methodAction $fillInMethods
 
+source method-human-generic-eeg.tcl
+create_method_human_generic_eeg ${DOC_NS} $methodAction $fillInMethods
+
 source method-animal-generic.tcl
 create_method_animal_generic ${DOC_NS} $methodAction $fillInMethods
 
