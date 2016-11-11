@@ -151,6 +151,30 @@ proc create_doc_type_pssd_human_identity { doc_ns } {
             :element -name suffix -type string -min-occurs 0 -max-occurs 1 -length 20 -label "Suffix" >
 }
 
+#============================================================================#
+# creates doc type: ${doc_ns}:vicnode-study                                  #
+#                                                                            #
+# Information about the generic VicNode study.                               #  
+#============================================================================#
+proc create_doc_type_vicnode_study { doc_ns } {
+    asset.doc.type.update :create true \
+        :type ${doc_ns}:vicnode-study \
+        :label "VicNode study" \
+        :description "A VicNode generic study." \
+        :definition < \
+            :element -name "ingest" -type "document" -index "true" -min-occurs "0" -max-occurs "1" < \
+                :description "Ingest details." \
+                :element -name "date" -type "date" -index "true" -max-occurs "1" < \
+                    :description "Date and time when the study was ingested." > \
+                :element -name "domain" -type "string" -index "true" -max-occurs "1" < \
+                    :description "Domain of the user that ingested this study." > \
+                :element -name "user" -type "string" -index "true" -max-occurs "1" < \
+                    :description "User that ingested this study." > > \
+            :element -name "sdate" -type date -min-occurs 0 -max-occurs 1 -index true < \
+                :description "Date on which acquisition of the study was started." \
+                :restriction -base date < :time false > > >
+}
+
 
 #============================================================================#
 # creates doc type: ${doc_ns}:femur-subject                                  #
@@ -248,6 +272,7 @@ proc create_doc_types { doc_ns dict_ns } {
     create_doc_type_pssd_human_subject ${doc_ns}
     create_doc_type_pssd_identity ${doc_ns}
     create_doc_type_pssd_human_identity ${doc_ns}
+    create_doc_type_vicnode_study ${doc_ns}
     create_doc_type_femur_subject ${doc_ns}
     create_doc_type_femur_study ${doc_ns} ${dict_ns}
     create_doc_type_femur_dataset ${doc_ns} ${dict_ns}
@@ -263,6 +288,7 @@ proc destroy_doc_types { doc_ns } {
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-human-subject  :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-identity       :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:pssd-human-identity :force true } catch { Throwable } { }
+    try { asset.doc.type.destroy :type ${doc_ns}:vicnode-study         :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:femur-subject       :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:femur-study         :force true } catch { Throwable } { }
     try { asset.doc.type.destroy :type ${doc_ns}:femur-dataset       :force true } catch { Throwable } { }

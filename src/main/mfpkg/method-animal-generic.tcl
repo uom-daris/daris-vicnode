@@ -52,7 +52,7 @@ proc create_method_animal_generic { doc_ns { action 0 } { fillin 0 } } {
         :step < \
             :name \"Generic acquisition for animal subject\" \
             :description \"Generic acquisition for animal subject\" \
-            :study < :type Unspecified > >"
+            :study < :type Unspecified :metadata < :definition -requirement optional ${doc_ns}:vicnode-study > > >"
 
     if { ${id} != "" && ${action} == 1 } {
         # replace (update) the existing method
