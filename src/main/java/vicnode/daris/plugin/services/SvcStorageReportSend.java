@@ -163,7 +163,7 @@ public class SvcStorageReportSend extends PluginService {
              * Collection Code
              */
             sb.append('"').append("VicNode:")
-                    .append(ae.stringValue("meta/" + DOC_TYPE + "/code", "")).append("DaRIS-Project-").append(cid)
+                    .append(ae.stringValue("meta/" + DOC_TYPE + "/code", "")).append(":DaRIS-Project-").append(cid)
                     .append('"').append(",");
 
             /*
