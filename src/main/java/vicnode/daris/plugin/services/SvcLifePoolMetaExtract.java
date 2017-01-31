@@ -11,6 +11,7 @@ import arc.mf.plugin.dtype.DoubleType;
 import arc.mf.plugin.dtype.StringType;
 import arc.mf.plugin.dtype.XmlDocType;
 import arc.xml.XmlDoc.Element;
+import arc.xml.XmlDoc;
 import arc.xml.XmlDocMaker;
 import arc.xml.XmlWriter;
 
@@ -61,7 +62,8 @@ public class SvcLifePoolMetaExtract extends PluginService {
         dm.add("tag", "00181400");
         dm.add("tag", "00185101");
         dm.add("tag", "00200062");
-        executor().execute("dicom.metadata.populate", dm.root());
+        XmlDoc.Element r = executor().execute("dicom.metadata.populate", dm.root());
+        w.addAll(r.elements());
 }
    
 
