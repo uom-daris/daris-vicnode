@@ -1,15 +1,7 @@
 package vicnode.daris.plugin.services;
 
-import nig.mf.Executor;
-import nig.mf.plugin.util.PluginExecutor;
-import vicnode.daris.plugin.VicnodeDomainMetaData;
 import arc.mf.plugin.PluginService;
-import arc.mf.plugin.dtype.BooleanType;
 import arc.mf.plugin.dtype.CiteableIdType;
-import arc.mf.plugin.dtype.DateType;
-import arc.mf.plugin.dtype.DoubleType;
-import arc.mf.plugin.dtype.StringType;
-import arc.mf.plugin.dtype.XmlDocType;
 import arc.xml.XmlDoc.Element;
 import arc.xml.XmlDoc;
 import arc.xml.XmlDocMaker;
