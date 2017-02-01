@@ -43,17 +43,17 @@ public class SvcLifePoolMetaExtract extends PluginService {
         XmlDocMaker dm = new XmlDocMaker("args");
         dm.add("id", id);
         dm.add("if-exists", "replace");
-        dm.add("tag", "00080008");
-        dm.add("tag", "00080050");
-        dm.add("tag", "00080060");
-        dm.add("tag", "00080068");
-        dm.add("tag", "00080070");
-        dm.add("tag", "00080080");
-        dm.add("tag", "0008103E");
-        dm.add("tag", "00081090");
-        dm.add("tag", "00181400");
-        dm.add("tag", "00185101");
-        dm.add("tag", "00200062");
+        dm.add("tag", "00080008");   // Image Type
+        dm.add("tag", "00080050");   // Accession Number
+        dm.add("tag", "00080060");   // Modality
+        dm.add("tag", "00080068");   // Presentation Intent Type
+        dm.add("tag", "00080070");   // Instrument Manufacturer Name
+        dm.add("tag", "00080080");   // Institution
+        dm.add("tag", "0008103E");   // Series description
+        dm.add("tag", "00081090");   // Instrument Model
+        dm.add("tag", "00181400");   // Acquisition Device Processing Description
+        dm.add("tag", "00185101");   // View position
+        dm.add("tag", "00200062");   // Image Laterality
         XmlDoc.Element r = executor().execute("dicom.metadata.populate", dm.root());
         w.addAll(r.elements());
 }
