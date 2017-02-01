@@ -43,7 +43,7 @@ public class SvcLifePoolMetaExtract extends PluginService {
         XmlDocMaker dm = new XmlDocMaker("args");
         dm.add("id", id);
         dm.add("if-exists", "replace");
-        dm.add("tag","00080008");
+        dm.add("tag", "00080008");
         dm.add("tag", "00080050");
         dm.add("tag", "00080060");
         dm.add("tag", "00080068");
