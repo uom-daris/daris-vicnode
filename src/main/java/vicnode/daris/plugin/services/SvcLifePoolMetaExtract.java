@@ -2,6 +2,7 @@ package vicnode.daris.plugin.services;
 
 import arc.mf.plugin.PluginService;
 import arc.mf.plugin.dtype.CiteableIdType;
+import arc.mf.plugin.dtype.IntegerType;
 import arc.xml.XmlDoc.Element;
 import arc.xml.XmlDoc;
 import arc.xml.XmlDocMaker;
@@ -19,7 +20,9 @@ public class SvcLifePoolMetaExtract extends PluginService {
         _defn = new Interface();
         _defn.add(new Interface.Element("id", CiteableIdType.DEFAULT,
                 "The asset ID of the dicom/series asset. ", 1, 1));
-    }
+        _defn.add(new Interface.Element("idx", IntegerType.POSITIVE,
+                "This specifies the idx'th file in the DICOM series archive. Defaults to zero.", 0, 1));
+     }
 
     @Override
     public Access access() {
@@ -40,9 +43,11 @@ public class SvcLifePoolMetaExtract extends PluginService {
     public void execute(Element args, Inputs inputs, Outputs outputs,
             XmlWriter w) throws Throwable {
         String id = args.value("id");
+        int idx = args.intValue("idx", 0);
         XmlDocMaker dm = new XmlDocMaker("args");
         dm.add("id", id);
-        dm.add("if-exists", "replace");
+        dm.add("idx",idx);
+        dm.add("if-exists", "merge");
         dm.add("tag", "00080008");   // Image Type
         dm.add("tag", "00080050");   // Accession Number
         dm.add("tag", "00080060");   // Modality
