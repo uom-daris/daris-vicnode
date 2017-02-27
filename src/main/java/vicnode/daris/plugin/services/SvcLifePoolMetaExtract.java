@@ -61,6 +61,7 @@ public class SvcLifePoolMetaExtract extends PluginService {
         dm.add("idx", idx);
         dm.add("doc-tag", "pssd.meta");
         dm.add("if-exists", "merge");
+        dm.add("ignore-errors", false);
         dm.add("tag", "00080008"); // Image Type
         dm.add("tag", "00080018"); // SOP Instance UID  ::NOTE:: We need SOPInstanceUID to identify the source dicom file. 
         dm.add("tag", "00080050"); // Accession Number
