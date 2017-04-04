@@ -56,7 +56,7 @@ proc create_method_human_mammography { doc_ns { action 0 } { fillin 0 } } {
          :step < \
             :name \"Mammography acquisition for human subject\" \
             :description \"Mammography acquisition for human subject\" \
-            :study < :type Mammography :dicom < :modality MG :modality CR > > >"
+            :study < :type Mammography :dicom < :modality MG :modality CR :modality OT > > >"
  
     if { ${id} != "" && ${action} == 1 } {
         # replace (update) the existing method
