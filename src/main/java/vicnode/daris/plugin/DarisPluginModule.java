@@ -7,6 +7,7 @@ import arc.mf.plugin.ConfigurationResolver;
 import arc.mf.plugin.PluginService;
 import vicnode.daris.plugin.services.SvcDicomProxyUserCreate;
 import vicnode.daris.plugin.services.SvcLifePoolMetaExtract;
+import vicnode.daris.plugin.services.SvcStorageReportGenerate;
 import vicnode.daris.plugin.services.SvcStorageReportSend;
 import vicnode.daris.plugin.services.SvcSubjectMetaSet;
 import vicnode.daris.plugin.services.SvcUserAAFCreate;
@@ -37,6 +38,7 @@ public class DarisPluginModule implements arc.mf.plugin.PluginModule {
         _services = new Vector<PluginService>();
         _services.add(new SvcDicomProxyUserCreate());
         _services.add(new SvcStorageReportSend());
+        _services.add(new SvcStorageReportGenerate());
         _services.add(new SvcSubjectMetaSet());
         _services.add(new SvcUserAAFCreate());
         _services.add(new SvcUserCreate());
