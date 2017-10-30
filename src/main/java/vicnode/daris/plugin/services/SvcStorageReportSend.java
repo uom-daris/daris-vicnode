@@ -29,11 +29,9 @@ public class SvcStorageReportSend extends PluginService {
 
     public SvcStorageReportSend() {
         _defn = new Interface();
-        _defn.add(new Interface.Element("format",
-                new EnumType(new String[] { "csv", "xml" }),
+        _defn.add(new Interface.Element("format", new EnumType(new String[] { "csv", "xml" }),
                 "Report file format. Defaults to csv.", 0, 1));
-        _defn.add(new Interface.Element("to", EmailAddressType.DEFAULT,
-                "The receipient email address.", 1, 256));
+        _defn.add(new Interface.Element("to", EmailAddressType.DEFAULT, "The receipient email address.", 1, 256));
     }
 
     @Override
@@ -52,35 +50,66 @@ public class SvcStorageReportSend extends PluginService {
     }
 
     @Override
-    public void execute(Element args, Inputs inputs, Outputs outputs,
-            XmlWriter w) throws Throwable {
+    public void execute(Element args, Inputs inputs, Outputs outputs, XmlWriter w) throws Throwable {
         String format = args.stringValue("format", "csv");
         Collection<String> receipients = args.values("to");
-        XmlDocMaker dm = new XmlDocMaker("args");
-        dm.add("size", "infinity"); // There should not be too many projects.
-        dm.add("action", "get-meta");
-        dm.add("where",
-                "model='om.pssd.project' and " + DOC_TYPE + " has value");
-        List<XmlDoc.Element> aes = executor().execute("asset.query", dm.root())
-                .elements("asset");
-        if (aes == null || aes.isEmpty()) {
-            return; // throw exception?
-        }
 
-        String report;
-        String mimeType;
-        if ("csv".equalsIgnoreCase(format)) {
-            report = createCsvReport(aes);
-            mimeType = "text/csv";
-        } else {
-            report = createXmlReport(aes);
-            mimeType = "text/xml";
-        }
-        sendEmail(receipients, report, mimeType);
+        String report = "csv".equalsIgnoreCase(format) ? generateCSVReport(executor()) : generateXMLReport(executor());
+        String mimeType = "csv".equalsIgnoreCase(format) ? "text/csv" : "test/xml";
+
+        sendEmail(executor(), receipients, report, mimeType);
 
     }
 
-    private void sendEmail(Collection<String> receipients, String report,
+    private static String generateCSVReport(ServiceExecutor executor) throws Throwable {
+        StringBuilder sb = new StringBuilder();
+        // header
+        sb.append(
+                "Extraction Date, Collection Code, Collection Name, Managing Software, Mediaflux/DaRIS ID, Allocated Storage (GB), Used Storage (GB),\n");
+        String date = new SimpleDateFormat("d-MMM-yyyy").format(new Date());
+        List<XmlDoc.Element> ces = getStorageCollections(executor);
+        if (ces != null) {
+            for (XmlDoc.Element ce : ces) {
+                String code = ce.value("@code");
+                double quota = ce.doubleValue("quota");
+                List<XmlDoc.Element> pes = ce.elements("project");
+                int nbProjects = pes == null ? 0 : pes.size();
+                if (nbProjects > 0) {
+                    double pquota = quota == 0 ? 0 : (quota / nbProjects);
+                    for (XmlDoc.Element pe : pes) {
+                        String cid = pe.value("@cid");
+                        double pused = pe.doubleValue("used");
+                        String pname = pe.value("name");
+                        sb.append('"').append(date).append('"').append(",");
+                        sb.append('"').append("VicNode:").append(code).append(":DaRIS-Project-").append(cid).append('"')
+                                .append(",");
+                        sb.append('"').append(pname).append('"').append(",");
+                        sb.append('"').append("DaRIS/Mediaflux").append('"').append(",");
+                        sb.append('"').append(cid).append('"').append(",");
+                        sb.append('"').append(String.format("%.3f GB", pquota)).append('"').append(",");
+                        sb.append('"').append(String.format("%.3f GB", pused)).append('"').append(",");
+                        sb.append("\n");
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String generateXMLReport(ServiceExecutor executor) throws Throwable {
+        XmlDocMaker dm = new XmlDocMaker("args");
+        dm.add("detailed", true);
+        XmlDoc.Element re = executor.execute(SvcStorageCollectionDescribe.SERVICE_NAME, dm.root());
+        return re.toString();
+    }
+
+    private static List<XmlDoc.Element> getStorageCollections(ServiceExecutor executor) throws Throwable {
+        XmlDocMaker dm = new XmlDocMaker("args");
+        dm.add("detailed", true);
+        return executor.execute(SvcStorageCollectionDescribe.SERVICE_NAME, dm.root()).elements("collection");
+    }
+
+    private static void sendEmail(ServiceExecutor executor, Collection<String> receipients, String report,
             String mimeType) throws Throwable {
         String ext = "csv";
         if ("text/xml".equalsIgnoreCase(mimeType)) {
@@ -88,17 +117,12 @@ public class SvcStorageReportSend extends PluginService {
         }
         XmlDocMaker dm = new XmlDocMaker("args");
 
-        dm.add("subject", SUBJECT_PREFIX + " ["
-                + new SimpleDateFormat(DateTime.DATE_FORMAT).format(new Date())
-                + "]");
+        dm.add("subject", SUBJECT_PREFIX + " [" + new SimpleDateFormat(DateTime.DATE_FORMAT).format(new Date()) + "]");
 
-        dm.add("body",
-                "Please see the attached DaRIS project storage usage report.");
+        dm.add("body", "Please see the attached DaRIS project storage usage report.");
 
         dm.push("attachment");
-        dm.add("name", ATTACHMENT_NAME_PREFIX
-                + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
-                + "." + ext);
+        dm.add("name", ATTACHMENT_NAME_PREFIX + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "." + ext);
         dm.add("type", mimeType);
         dm.pop();
 
@@ -107,119 +131,8 @@ public class SvcStorageReportSend extends PluginService {
         }
 
         dm.add("async", false);
-        PluginService.Input input = new PluginService.StringInput(report,
-                mimeType);
-        executor().execute("mail.send", dm.root(),
-                new PluginService.Inputs(input), null);
-
-    }
-
-    private String createXmlReport(List<Element> aes) throws Throwable {
-        XmlDocMaker dm = new XmlDocMaker("vicnode-collections");
-        for (XmlDoc.Element ae : aes) {
-            String cid = ae.value("cid");
-            long du = getProjectDiskUsage(executor(), cid);
-
-            dm.push("collection");
-            dm.add("code", ae.value("meta/" + DOC_TYPE + "/code"));
-            dm.add("name", ae.value("meta/daris:pssd-object/name"));
-            dm.add("cid", cid);
-            if (ae.elementExists("meta/" + DOC_TYPE + "/quota")) {
-                double quota = ae.doubleValue("meta/" + DOC_TYPE + "/quota");
-                String quotaUnit = ae
-                        .value("meta/" + DOC_TYPE + "/quota/@unit");
-                if ("pb".equalsIgnoreCase(quotaUnit)) {
-                    quota = quota * 1000 * 1000;
-                } else if ("tb".equalsIgnoreCase(quotaUnit)) {
-                    quota = quota * 1000;
-                }
-                dm.add("allocated", new String[] { "unit", "gb" },
-                        String.format("%.3f", quota));
-            }
-            dm.add("used", new String[] { "unit", "gb" },
-                    String.format("%.3f", (double) du / 1000000000.0));
-            dm.pop();
-        }
-        return dm.root().toString();
-    }
-
-    private String createCsvReport(List<Element> aes) throws Throwable {
-        StringBuilder sb = new StringBuilder();
-        // header
-        sb.append(
-                "Extraction Date, Collection Code, Collection Name, Managing Software, Mediaflux/DaRIS ID, Allocated Storage (GB), Used Storage (GB),\n");
-        for (XmlDoc.Element ae : aes) {
-            String cid = ae.value("cid");
-            long du = getProjectDiskUsage(executor(), cid);
-
-            /*
-             * Extraction Date
-             */
-            sb.append('"').append(
-                    new SimpleDateFormat("d-MMM-yyyy").format(new Date()))
-                    .append('"').append(",");
-
-            /*
-             * Collection Code
-             */
-            sb.append('"').append("VicNode:")
-                    .append(ae.stringValue("meta/" + DOC_TYPE + "/code", "")).append(":DaRIS-Project-").append(cid)
-                    .append('"').append(",");
-
-            /*
-             * Collection Name
-             */
-            sb.append('"')
-                    .append(ae.stringValue("meta/daris:pssd-object/name", "")
-                            .replace('"', '\''))
-                    .append('"').append(",");
-
-            /*
-             * Managing Software
-             */
-            sb.append('"').append("DaRIS/Mediaflux").append('"').append(",");
-
-            /*
-             * Mediaflux/DaRIS ID
-             */
-            sb.append('"').append(cid).append('"').append(",");
-
-            /*
-             * Allocated Storage
-             */
-            sb.append('"');
-            if (ae.elementExists("meta/" + DOC_TYPE + "/quota")) {
-                double quota = ae.doubleValue("meta/" + DOC_TYPE + "/quota");
-                String quotaUnit = ae
-                        .value("meta/" + DOC_TYPE + "/quota/@unit");
-                if ("pb".equalsIgnoreCase(quotaUnit)) {
-                    quota = quota * 1000 * 1000;
-                } else if ("tb".equalsIgnoreCase(quotaUnit)) {
-                    quota = quota * 1000;
-                }
-                sb.append(String.format("%.3f GB", quota));
-            }
-            sb.append('"').append(",");
-
-            /*
-             * Used Storage
-             */
-            sb.append('"')
-                    .append(String.format("%.3f GB",
-                            (double) du / 1000000000.0))
-                    .append('"').append(",");
-
-            sb.append("\n");
-
-        }
-        return sb.toString();
-    }
-
-    private static long getProjectDiskUsage(ServiceExecutor executor,
-            String projectCid) throws Throwable {
-        return executor.execute("daris.project.disk-usage.get",
-                "<args><cid>" + projectCid + "</cid></args>", null, null)
-                .longValue("project/disk-usage");
+        PluginService.Input input = new PluginService.StringInput(report, mimeType);
+        executor.execute("mail.send", dm.root(), new PluginService.Inputs(input), null);
     }
 
     @Override

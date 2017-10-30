@@ -7,6 +7,11 @@ import arc.mf.plugin.ConfigurationResolver;
 import arc.mf.plugin.PluginService;
 import vicnode.daris.plugin.services.SvcDicomProxyUserCreate;
 import vicnode.daris.plugin.services.SvcLifePoolMetaExtract;
+import vicnode.daris.plugin.services.SvcProjectStorageCollectionIdentitySet;
+import vicnode.daris.plugin.services.SvcProjectStorageCollectionIdentityUnset;
+import vicnode.daris.plugin.services.SvcStorageCollectionAdd;
+import vicnode.daris.plugin.services.SvcStorageCollectionDescribe;
+import vicnode.daris.plugin.services.SvcStorageCollectionRemove;
 import vicnode.daris.plugin.services.SvcStorageReportGenerate;
 import vicnode.daris.plugin.services.SvcStorageReportSend;
 import vicnode.daris.plugin.services.SvcSubjectMetaSet;
@@ -43,9 +48,16 @@ public class DarisPluginModule implements arc.mf.plugin.PluginModule {
         _services.add(new SvcUserAAFCreate());
         _services.add(new SvcUserCreate());
         _services.add(new SvcUserGrant());
+        
         //
         _services.add(new SvcLifePoolMetaExtract());
-
+        
+        //
+        _services.add(new SvcProjectStorageCollectionIdentitySet());
+        _services.add(new SvcProjectStorageCollectionIdentityUnset());
+        _services.add(new SvcStorageCollectionAdd());
+        _services.add(new SvcStorageCollectionDescribe());
+        _services.add(new SvcStorageCollectionRemove());
     }
 
     @Override
