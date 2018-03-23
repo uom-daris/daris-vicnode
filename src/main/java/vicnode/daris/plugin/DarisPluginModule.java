@@ -6,6 +6,7 @@ import java.util.Vector;
 import arc.mf.plugin.ConfigurationResolver;
 import arc.mf.plugin.PluginService;
 import vicnode.daris.plugin.services.SvcDicomProxyUserCreate;
+import vicnode.daris.plugin.services.SvcHoffmanMigrate;
 import vicnode.daris.plugin.services.SvcLifePoolMetaExtract;
 import vicnode.daris.plugin.services.SvcProjectStorageCollectionIdentitySet;
 import vicnode.daris.plugin.services.SvcProjectStorageCollectionIdentityUnset;
@@ -58,6 +59,8 @@ public class DarisPluginModule implements arc.mf.plugin.PluginModule {
         _services.add(new SvcStorageCollectionAdd());
         _services.add(new SvcStorageCollectionDescribe());
         _services.add(new SvcStorageCollectionRemove());
+        //
+        _services.add(new SvcHoffmanMigrate());
     }
 
     @Override
